@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     public Image[] strikes;
     public Image[] speedUpSignals;
     public GameObject gameOverScreen;
+    public GameObject difficultySelectionScreen;
 
     public AudioSource speedUpSound;
     public CameraShake cameraShake;
@@ -30,13 +32,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         diamondText = diamondTextObject.GetComponent<Text>();
-        // Instantiate diamond somewhere not where the player is at
         player = FindObjectOfType<PlayerScript>();
-        // Generate board
-        InitializeGame();
     }
 
-    private void InitializeGame()
+    public void InitializeGame(string selectedBoardSize)
     {
         // Reset game data
         LoopScript[] existingLoops = FindObjectsOfType<LoopScript>();
@@ -54,6 +53,7 @@ public class GameManager : MonoBehaviour
             strike.color = Color.white;
         }
         gameOverScreen.SetActive(false);
+        difficultySelectionScreen.SetActive(false);
         speedModifier = 1f;
         diamondCount = 0;
         strikeCount = 0;
@@ -61,7 +61,9 @@ public class GameManager : MonoBehaviour
         diamondLocationX = 0;
         diamondLocationY = 0;
         diamondText.text = "0";
+        player.coolDown = 0f;
         // Initialize board
+        boardSize = int.Parse(selectedBoardSize);
         int halfSize = Mathf.FloorToInt(boardSize * 0.5f);
         for (int x = -halfSize; x <= halfSize; x++)
         {
@@ -82,9 +84,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isGameOver && Input.GetKeyDown(KeyCode.Space))
+        if (isGameOver && !difficultySelectionScreen.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
         {
-            InitializeGame();
+            InitializeGame(boardSize.ToString());
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isGameOver)
+            {
+                isGameOver = true;
+            }
+            difficultySelectionScreen.SetActive(true);
         }
     }
 
@@ -117,8 +127,8 @@ public class GameManager : MonoBehaviour
         int halfSize = Mathf.FloorToInt(boardSize * 0.5f);
         while (diamondX == diamondLocationX && diamondY == diamondLocationY)
         {
-            diamondX = Random.Range(-halfSize, halfSize + 1);
-            diamondY = Random.Range(-halfSize, halfSize + 1);
+            diamondX = UnityEngine.Random.Range(-halfSize, halfSize + 1);
+            diamondY = UnityEngine.Random.Range(-halfSize, halfSize + 1);
         }
         Instantiate(diamondObject, new Vector2(diamondX, diamondY), Quaternion.identity);
         diamondLocationX = diamondX;

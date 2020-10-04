@@ -64,7 +64,7 @@ public class LoopScript : MonoBehaviour
             newSize = size - deltaTime * (speed * gameManager.speedModifier);
         }
         transform.localScale = new Vector2(newSize, newSize);
-        if (newSize < 0.5)
+        if (newSize < 0.45)
         {
             sprite.color = Color.red;
         } else
@@ -75,7 +75,7 @@ public class LoopScript : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player" && transform.localScale.x < 0.5)
+        if (collision.gameObject.tag == "Player" && transform.localScale.x < 0.45)
         {
             contractSound.Play();
             gameManager.Strike();

@@ -45,6 +45,9 @@ TagManager:
   - name: Diamond
     uniqueID: 425665935
     locked: 0
+  - name: Loop
+    uniqueID: 3526822857
+    locked: 0
   - name: Player
     uniqueID: 3145281079
     locked: 0

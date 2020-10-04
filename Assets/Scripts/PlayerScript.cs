@@ -7,8 +7,7 @@ public class PlayerScript : MonoBehaviour
     GameManager gameManager;
     int posX = 0;
     int posY = 0;
-    [SerializeField]
-    float coolDown = 0f;
+    public float coolDown = 0f;
     public AudioSource pickUpSound;
     public DashSound dashSound;
     // Start is called before the first frame update
